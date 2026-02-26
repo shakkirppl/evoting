@@ -45,7 +45,10 @@ DashboardController::class.'@index');
         ->name('live.dashboard');
 
     Route::get('/live-results',
-        [LiveDashboardController::class,'liveResults']);
+        [LiveDashboardController::class,'liveResults'])->name('live.results');;
+
+        Route::get('/candidate-voters/{id}',
+    [LiveDashboardController::class,'candidateVoters'])->name('candidate.voters');;
 
 });
 
