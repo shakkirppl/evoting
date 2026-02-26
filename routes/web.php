@@ -2,6 +2,10 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\VoteController;
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\CandidateController;
+use App\Http\Controllers\Admin\ElectionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,12 +34,17 @@ Route::middleware('auth')->group(function () {
     Route::get('/vote',[VoteController::class,'index']);
     Route::post('/vote',[VoteController::class,'store']);
 });
-Route::middleware(['auth','admin'])
-->prefix('admin')
-->group(function(){
+Route::prefix('admin')
+    ->middleware(['auth','admin'])
+    ->name('admin.')
+    ->group(function () {
 
 Route::get('/dashboard',
 DashboardController::class.'@index');
+ Route::resource('candidates', CandidateController::class);
+   Route::post('election-toggle',
+        [ElectionController::class,'toggle']
+    )->name('election.toggle');
 
 });
 
