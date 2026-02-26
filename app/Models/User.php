@@ -41,4 +41,10 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    // User can cast only one vote
+public function vote()
+{
+    return $this->hasOne(Vote::class);
+}
 }
