@@ -7,6 +7,7 @@ use DB;
 use App\Models\Vote;
 use App\Models\Candidate;
 use App\Http\Requests\VoteRequest;
+use App\Models\Election;
 class VoteController extends Controller
 {
     //
@@ -15,16 +16,6 @@ class VoteController extends Controller
      */
     public function index()
     {
-        // $user = auth()->user();
-
-        // // Prevent revote
-        // if ($user->has_voted) {
-        //     return redirect()->route('thankyou');
-        // }
-
-        // $candidates = Candidate::all();
-
-        // return view('vote.index',compact('candidates'));
 
          $candidates = Candidate::all();
 
@@ -45,7 +36,16 @@ class VoteController extends Controller
         if (!$user) {
             return redirect()->route('login');
         }
+ /*
+    |--------------------------------------------------------------------------
+    | Election Status Check
+    |--------------------------------------------------------------------------
+    */
+    $election = Election::first();
 
+    if (!$election || !$election->is_active) {
+        return back()->with('error','Election Stopped.');
+    }
         // Already voted check
         if (Vote::where('user_id', $user->id)->exists()) {
             return back()->with('error','You already voted.');
