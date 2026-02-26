@@ -6,6 +6,7 @@ use App\Http\Controllers\VoteController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\CandidateController;
 use App\Http\Controllers\Admin\ElectionController;
+use App\Http\Controllers\Admin\LiveDashboardController;
 
 /*
 |--------------------------------------------------------------------------

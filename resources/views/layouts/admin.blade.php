@@ -36,6 +36,16 @@ class="block hover:bg-gray-700 p-2 rounded">
 </a>
 
 <!-- Election Start / Stop -->
+ @php
+$status = \App\Models\Election::first();
+@endphp
+
+<p class="mb-4 text-sm">
+Status :
+<span class="{{ $status && $status->is_active ? 'text-green-400':'text-red-400' }}">
+{{ $status && $status->is_active ? 'LIVE' : 'STOPPED' }}
+</span>
+</p>
 <form method="POST" action="{{ route('admin.election.toggle') }}">
 @csrf
 <button
