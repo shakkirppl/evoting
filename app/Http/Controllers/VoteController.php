@@ -15,42 +15,51 @@ class VoteController extends Controller
      */
     public function index()
     {
-        $user = auth()->user();
+        // $user = auth()->user();
 
-        // Prevent revote
-        if ($user->has_voted) {
-            return redirect()->route('thankyou');
-        }
+        // // Prevent revote
+        // if ($user->has_voted) {
+        //     return redirect()->route('thankyou');
+        // }
 
-        $candidates = Candidate::all();
+        // $candidates = Candidate::all();
 
-        return view('vote.index',compact('candidates'));
+        // return view('vote.index',compact('candidates'));
+
+         $candidates = Candidate::all();
+
+    $userVote = auth()->check()
+        ? \App\Models\Vote::where('user_id',auth()->id())->first()
+        : null;
+
+    return view('welcome',compact('candidates','userVote'));
     }
 
     /**
      * Store vote securely
      */
-    public function store(VoteRequest $request)
+   public function vote($candidateId)
     {
         $user = auth()->user();
 
-        if ($user->has_voted) {
-            return back()->with('error','Already voted');
+        if (!$user) {
+            return redirect()->route('login');
         }
 
-        DB::transaction(function() use ($request,$user){
+        // Already voted check
+        if (Vote::where('user_id', $user->id)->exists()) {
+            return back()->with('error','You already voted.');
+        }
+
+        DB::transaction(function () use ($user,$candidateId) {
 
             Vote::create([
                 'user_id'=>$user->id,
-                'candidate_id'=>$request->candidate_id
+                'candidate_id'=>$candidateId
             ]);
 
-            // lock voter
-            $user->update([
-                'has_voted'=>true
-            ]);
         });
 
-        return redirect()->route('thankyou');
+        return back()->with('success','Vote submitted successfully.');
     }
 }

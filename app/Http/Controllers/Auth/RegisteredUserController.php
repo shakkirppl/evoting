@@ -46,11 +46,7 @@ class RegisteredUserController extends Controller
         event(new Registered($user));
 
         Auth::login($user);
-
-       // ✅ ROLE BASED REDIRECT
-    if ($user->role === 'voter') {
-        return redirect()->route('dashboard');
-    }
-      return redirect('admin/dashboard');
+    
+      return redirect('/');
     }
 }

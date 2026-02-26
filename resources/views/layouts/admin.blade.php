@@ -30,7 +30,7 @@ class="block hover:bg-gray-700 p-2 rounded">
 ➕ Candidate Register
 </a>
 
-<a href="/admin/live-dashboard"
+<a href="{{ route('admin.live.dashboard') }}"
 class="block hover:bg-gray-700 p-2 rounded">
 📊 Live Results
 </a>
@@ -54,6 +54,18 @@ class="w-full text-left hover:bg-gray-700 p-2 rounded">
 </button>
 </form>
 
+<hr class="border-gray-700 my-4">
+
+{{-- LOGOUT MENU --}}
+<form method="POST" action="{{ route('logout') }}">
+@csrf
+
+<button
+class="w-full text-left hover:bg-red-600 p-2 rounded">
+🚪 Logout
+</button>
+
+</form>
 </nav>
 
 </div>

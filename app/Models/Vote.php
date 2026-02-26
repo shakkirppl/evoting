@@ -10,7 +10,10 @@ class Vote extends Model
 {
     use HasFactory;
     use SoftDeletes;
-
+ protected $fillable = [
+        'user_id',
+        'candidate_id',
+    ];
     public function user()
 {
     return $this->belongsTo(User::class);
