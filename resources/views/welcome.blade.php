@@ -103,12 +103,20 @@ Vote Closed
 
 @else
 
-<form method="POST" action="{{ route('vote',$candidate->id) }}">
+<form id="voteForm{{ $candidate->id }}"
+      method="POST"
+      action="{{ route('vote',$candidate->id) }}">
 @csrf
-<button
+
+<button type="button"
+onclick="confirmVote(
+'{{ $candidate->name }}',
+'voteForm{{ $candidate->id }}'
+)"
 class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded">
 Vote
 </button>
+
 </form>
 
 @endif
@@ -122,6 +130,87 @@ Vote
 </div>
 
 </div>
+<!-- ================= CONFIRM MODAL ================= -->
 
+<div id="confirmModal"
+class="fixed inset-0 bg-black/50 hidden
+flex items-center justify-center">
+
+<div class="bg-white p-8 rounded-lg w-96 text-center">
+
+<h3 class="text-xl font-bold mb-4">
+Confirm Your Vote
+</h3>
+
+<p id="candidateText" class="mb-6"></p>
+
+<div class="flex justify-center gap-4">
+
+<button onclick="submitVote()"
+class="bg-green-600 text-white px-5 py-2 rounded">
+Confirm
+</button>
+
+<button onclick="closeConfirm()"
+class="bg-gray-400 text-white px-5 py-2 rounded">
+Cancel
+</button>
+
+</div>
+
+</div>
+</div>
 </body>
+<script>
+
+let selectedForm = null;
+
+/*
+|--------------------------------------------------------------------------
+| Open Confirmation
+|--------------------------------------------------------------------------
+*/
+
+function confirmVote(candidateName, formId)
+{
+    selectedForm = formId;
+
+    document.getElementById('candidateText')
+        .innerHTML =
+        "Are you sure you want to vote for <b>" +
+        candidateName +
+        "</b>?";
+
+    document.getElementById('confirmModal')
+        .classList.remove('hidden');
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| Submit Vote
+|--------------------------------------------------------------------------
+*/
+
+function submitVote()
+{
+    if(selectedForm){
+        document.getElementById(selectedForm).submit();
+    }
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| Close Modal
+|--------------------------------------------------------------------------
+*/
+
+function closeConfirm()
+{
+    document.getElementById('confirmModal')
+        .classList.add('hidden');
+}
+
+</script>
 </html>
